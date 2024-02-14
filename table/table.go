@@ -30,8 +30,9 @@ type Row []string
 
 // Column defines the table structure.
 type Column struct {
-	Title string
-	Width int
+	Title           string
+	Width           int
+	AlignHorizontal lipgloss.Position
 }
 
 // KeyMap defines keybindings. It satisfies to the help.KeyMap interface, which
@@ -392,7 +393,7 @@ func (m Model) headersView() string {
 func (m *Model) renderRow(rowID int) string {
 	var s = make([]string, 0, len(m.cols))
 	for i, value := range m.rows[rowID] {
-		style := lipgloss.NewStyle().Width(m.cols[i].Width).MaxWidth(m.cols[i].Width).Inline(true)
+		style := lipgloss.NewStyle().Width(m.cols[i].Width).MaxWidth(m.cols[i].Width).Inline(true).AlignHorizontal(m.cols[i].AlignHorizontal)
 		renderedCell := m.styles.Cell.Render(style.Render(runewidth.Truncate(value, m.cols[i].Width, "…")))
 		s = append(s, renderedCell)
 	}
